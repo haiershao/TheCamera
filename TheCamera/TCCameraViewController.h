@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TCCameraViewController.h
 //  TheCamera
 //
 //  Created by honey.vi on 14-10-3.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface TCCameraViewController : UIViewController
 
 
 @end

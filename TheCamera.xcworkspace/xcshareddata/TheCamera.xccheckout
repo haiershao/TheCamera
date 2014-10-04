@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>EE85A5A5-7597-4E2E-9201-0DEA87967F3E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>TheCamera</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C4D70950D51A8EC446CE932A3040F39481BDC7DE</key>
+		<string>https://github.com/liunangit/TheCamera.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>TheCamera.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C4D70950D51A8EC446CE932A3040F39481BDC7DE</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/liunangit/TheCamera.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C4D70950D51A8EC446CE932A3040F39481BDC7DE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C4D70950D51A8EC446CE932A3040F39481BDC7DE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>TheCamera</string>
+		</dict>
+	</array>
+</dict>
+</plist>
