@@ -26,8 +26,8 @@
 
 @protocol TCCameraHelperDelegate <NSObject>
 
-@required
-- (UIInterfaceOrientation)cameraOrientation;
+//@required
+//- (UIInterfaceOrientation)cameraOrientation;
 
 @optional
 - (void)cameraEngineCapturingStillImage:(TCCameraEngine *)engine;

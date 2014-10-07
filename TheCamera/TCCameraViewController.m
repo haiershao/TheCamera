@@ -41,11 +41,6 @@
     self.shutterButton.enabled = enabled;
 }
 
-- (UIInterfaceOrientation)cameraOrientation
-{
-    return self.interfaceOrientation;
-}
-
 - (void)cameraEngineCapturingStillImage:(TCCameraEngine *)engine
 {
     [[engine.preview layer] setOpacity:0.0];

@@ -65,6 +65,16 @@
                                             <action selector="capture:" destination="BYZ-38-t0r" eventType="touchDown" id="yEE-x0-EeP"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="o4g-mr-UTp">
+                                        <rect key="frame" x="8" y="14" width="35" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="lookup.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="Fv7-gP-770" kind="modal" id="hQp-Ie-VH8"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.60000002379999995" green="0.40000000600000002" blue="0.20000000300000001" alpha="0.5" colorSpace="calibratedRGB"/>
                             </view>
@@ -78,6 +88,63 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="83" y="133"/>
+        </scene>
+        <!--Assets View Controller-->
+        <scene sceneID="B3m-gB-bml">
+            <objects>
+                <collectionViewController id="Ym5-lp-rBi" customClass="CTAssetsViewController" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="y2F-O3-rNM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rl3-6i-WkI">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="v9b-LK-y9D" customClass="CTAssetsViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="Ym5-lp-rBi" id="mHE-O6-LzM"/>
+                            <outlet property="delegate" destination="Ym5-lp-rBi" id="uAs-iU-pTf"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="zCx-Qn-zMY">
+                        <barButtonItem key="leftBarButtonItem" title="back" id="XXK-Pb-f9C">
+                            <connections>
+                                <action selector="onBackAction:" destination="Ym5-lp-rBi" id="BND-ie-jdI"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qsf-yH-430" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="986" y="133"/>
+        </scene>
+        <!--图库-->
+        <scene sceneID="phz-Po-8w4">
+            <objects>
+                <navigationController title="图库" id="Fv7-gP-770" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4GE-cc-TQe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Ym5-lp-rBi" kind="relationship" relationship="rootViewController" id="OqV-WD-1bU"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HyN-Wk-grQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="534" y="133"/>
         </scene>
         <!--Title-->
         <scene sceneID="7xK-6O-34Y">
@@ -129,6 +196,9 @@
             <point key="canvasLocation" x="77" y="775"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="lookup.png" width="512" height="512"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
