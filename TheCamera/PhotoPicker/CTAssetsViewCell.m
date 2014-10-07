@@ -29,7 +29,7 @@
 #import "ALAsset+assetType.h"
 #import "ALAsset+accessibilityLabel.h"
 #import "NSDateFormatter+timeIntervalFormatter.h"
-
+#import "TCAsset.h"
 
 
 
@@ -90,6 +90,11 @@ static UIColor *disabledColor;
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         self.title = [df stringFromTimeInterval:[[asset valueForProperty:ALAssetPropertyDuration] doubleValue]];
     }
+}
+
+- (void)bindLocalAsset:(TCAsset *)asset
+{
+    self.image = asset.thumbImage;
 }
 
 - (void)setSelected:(BOOL)selected

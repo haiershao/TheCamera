@@ -10,6 +10,7 @@
 #import "TCCameraEngine.h"
 #import "TCCameraPreview.h"
 #import "TCSettingViewController.h"
+#import "TCAssetCacheManager.h"
 
 @interface TCCameraViewController () <TCCameraHelperDelegate>
 
@@ -89,7 +90,7 @@
 //    self.shutterButton.enabled = NO;
     [[TCCameraEngine sharedInstance] snapStillImage:^(NSData *imageData) {
 //        self.shutterButton.enabled = YES;
-        UIImage *image = [UIImage imageWithData:imageData];
+        [[TCAssetCacheManager defaultManager] cacheImageData:imageData metaData:nil];
     }];
 }
 

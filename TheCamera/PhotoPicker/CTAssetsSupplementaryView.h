@@ -37,3 +37,9 @@
 - (void)bind:(NSArray *)assets;
 
 @end
+
+@interface TCAssetsSupplementaryHeader : UICollectionReusableView
+
+@property (nonatomic, strong) UILabel *label;
+
+@end

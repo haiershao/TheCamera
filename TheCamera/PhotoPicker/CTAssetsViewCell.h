@@ -28,12 +28,13 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
-
+@class TCAsset;
 
 @interface CTAssetsViewCell : UICollectionViewCell
 
 @property (nonatomic, assign, getter = isEnabled) BOOL enabled;
 
 - (void)bind:(ALAsset *)asset;
+- (void)bindLocalAsset:(TCAsset *)asset;
 
 @end

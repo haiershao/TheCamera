@@ -90,3 +90,18 @@
 }
 
 @end
+
+@implementation TCAssetsSupplementaryHeader
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        _label = [[UILabel alloc] initWithFrame:self.bounds];
+        _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self addSubview:_label];
+    }
+    return self;
+}
+
+@end

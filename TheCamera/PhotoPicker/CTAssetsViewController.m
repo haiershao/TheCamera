@@ -33,14 +33,14 @@
 //#import "CTAssetsPageViewController.h"
 //#import "CTAssetsViewControllerTransition.h"
 #import "TCAssetManager.h"
-
+#import "TCAssetCacheManager.h"
 
 NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPickerSelectedAssetsChangedNotification";
 
 
 NSString * const CTAssetsViewCellIdentifier = @"CTAssetsViewCellIdentifier";
 NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryViewIdentifier";
-
+NSString * const TCAssetsSupplementaryHeaderIdentifier = @"TCAssetsSupplementaryHeaderIdentifier";
 
 
 //@interface CTAssetsPickerController ()
@@ -76,14 +76,18 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     UICollectionViewFlowLayout *layout = [self collectionViewFlowLayoutOfOrientation:UIInterfaceOrientationPortrait];
     self.collectionView.collectionViewLayout = layout;
     
-    self.collectionView.allowsMultipleSelection = YES;
+//    self.collectionView.allowsMultipleSelection = YES;
     
     [self.collectionView registerClass:CTAssetsViewCell.class
             forCellWithReuseIdentifier:CTAssetsViewCellIdentifier];
     
-    [self.collectionView registerClass:CTAssetsSupplementaryView.class
-            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                   withReuseIdentifier:CTAssetsSupplementaryViewIdentifier];
+    [self.collectionView registerClass:TCAssetsSupplementaryHeader.class
+            forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                   withReuseIdentifier:TCAssetsSupplementaryHeaderIdentifier];
+    
+//    [self.collectionView registerClass:CTAssetsSupplementaryView.class
+//            forSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+//                   withReuseIdentifier:CTAssetsSupplementaryViewIdentifier];
     
     self.preferredContentSize = kPopoverContentSize;
     
@@ -161,7 +165,7 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.itemSize             = kThumbnailSize;
-    layout.footerReferenceSize  = CGSizeMake(0, 47.0);
+    layout.headerReferenceSize  = CGSizeMake(0, 47.0);
     
     if (UIInterfaceOrientationIsLandscape(orientation) && (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad))
     {
@@ -286,7 +290,8 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
     TCAssetManager *assetManager = [TCAssetManager defaultManager];
     self.assets = assetManager.assetList;
     
-    if (self.assets.count > 0)
+    if (self.assets.count > 0 ||
+        [TCAssetCacheManager defaultManager].assetList.count > 0)
     {
         [self.collectionView reloadData];
         [self.collectionView setContentOffset:CGPointMake(0, self.collectionViewLayout.collectionViewContentSize.height)];
@@ -318,52 +323,65 @@ NSString * const CTAssetsSupplementaryViewIdentifier = @"CTAssetsSupplementaryVi
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.assets.count;
+    if (section == 0) {
+        return self.assets.count;
+    }
+    else if (section == 1) {
+        return [TCAssetCacheManager defaultManager].assetList.count;
+    }
+    return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CTAssetsViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:
                               CTAssetsViewCellIdentifier forIndexPath:indexPath];
-    ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
-    
-//    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldEnableAsset:)])
-//        cell.enabled = [self.picker.delegate assetsPickerController:self.picker shouldEnableAsset:asset];
-//    else
-//        cell.enabled = YES;
-    
-    // XXX
-    // Setting `selected` property blocks further deselection.
-    // Have to call selectItemAtIndexPath too. ( ref: http://stackoverflow.com/a/17812116/1648333 )
-//    if ([self.picker.selectedAssets containsObject:asset])
-//    {
-//        cell.selected = YES;
-//        [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-//    }
-    
-    [cell bind:asset];
+    if (indexPath.section == 0) {
+        ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
+        [cell bind:asset];
+    }
+    else {
+        TCAsset *asset = [[TCAssetCacheManager defaultManager].assetList objectAtIndex:indexPath.row];
+        [cell bindLocalAsset:asset];
+    }
     
     return cell;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    CTAssetsSupplementaryView *view =
-    [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                                       withReuseIdentifier:CTAssetsSupplementaryViewIdentifier
-                                              forIndexPath:indexPath];
-    
-    [view bind:self.assets];
-    
-    if (self.assets.count == 0)
-        view.hidden = YES;
-    
-    return view;
+    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+        CTAssetsSupplementaryView *view =
+        [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                           withReuseIdentifier:CTAssetsSupplementaryViewIdentifier
+                                                  forIndexPath:indexPath];
+        
+        [view bind:self.assets];
+        
+        if (self.assets.count == 0)
+            view.hidden = YES;
+        
+        return view;
+    }
+    else {
+        TCAssetsSupplementaryHeader *view =
+        [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                           withReuseIdentifier:TCAssetsSupplementaryHeaderIdentifier
+                                                  forIndexPath:indexPath];
+        if (indexPath.section == 0) {
+            view.label.text = @"相机胶卷";
+        }
+        else {
+            view.label.text = @"未储存的照片";
+        }
+        return view;
+    }
+    return nil;
 }
 
 

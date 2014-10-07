@@ -14,6 +14,9 @@
 		593B8ADE19DE4AC80078FD9E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 593B8ADC19DE4AC80078FD9E /* Main.storyboard */; };
 		593B8AE019DE4AC80078FD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 593B8ADF19DE4AC80078FD9E /* Images.xcassets */; };
 		593B8AE319DE4AC80078FD9E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 593B8AE119DE4AC80078FD9E /* LaunchScreen.xib */; };
+		599FBEC619E3A54700D9C363 /* TCAssetCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBEC519E3A54700D9C363 /* TCAssetCacheManager.m */; };
+		599FBEC919E3A57900D9C363 /* TCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBEC819E3A57900D9C363 /* TCAsset.m */; };
+		599FBED019E415AF00D9C363 /* TCImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBECF19E415AF00D9C363 /* TCImageHelper.m */; };
 		59FC2A9119DEBF8100B0F429 /* TCCameraView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FC2A9019DEBF8100B0F429 /* TCCameraView.m */; };
 		59FC2A9719DED86C00B0F429 /* TCCameraEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FC2A9619DED86C00B0F429 /* TCCameraEngine.m */; };
 		59FC2A9F19DEF0FE00B0F429 /* TCCameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FC2A9E19DEF0FE00B0F429 /* TCCameraPreview.m */; };
@@ -44,6 +47,12 @@
 		593B8AE219DE4AC80078FD9E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		593B8AED19DE4AC80078FD9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		593B8AEE19DE4AC80078FD9E /* TheCameraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TheCameraTests.m; sourceTree = "<group>"; };
+		599FBEC419E3A54700D9C363 /* TCAssetCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCAssetCacheManager.h; path = Cache/TCAssetCacheManager.h; sourceTree = "<group>"; };
+		599FBEC519E3A54700D9C363 /* TCAssetCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCAssetCacheManager.m; path = Cache/TCAssetCacheManager.m; sourceTree = "<group>"; };
+		599FBEC719E3A57900D9C363 /* TCAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCAsset.h; path = Cache/TCAsset.h; sourceTree = "<group>"; };
+		599FBEC819E3A57900D9C363 /* TCAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCAsset.m; path = Cache/TCAsset.m; sourceTree = "<group>"; };
+		599FBECE19E415AF00D9C363 /* TCImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCImageHelper.h; sourceTree = "<group>"; };
+		599FBECF19E415AF00D9C363 /* TCImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCImageHelper.m; sourceTree = "<group>"; };
 		59FC2A8F19DEBF8100B0F429 /* TCCameraView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCCameraView.h; sourceTree = "<group>"; };
 		59FC2A9019DEBF8100B0F429 /* TCCameraView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCCameraView.m; sourceTree = "<group>"; };
 		59FC2A9619DED86C00B0F429 /* TCCameraEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCCameraEngine.m; sourceTree = "<group>"; };
@@ -109,6 +118,7 @@
 		593B8AD119DE4AC80078FD9E /* TheCamera */ = {
 			isa = PBXGroup;
 			children = (
+				599FBEC319E3A51200D9C363 /* Cache */,
 				59FC2AA619DFE96F00B0F429 /* PhotoPicker */,
 				593B8AD619DE4AC80078FD9E /* AppDelegate.h */,
 				593B8AD719DE4AC80078FD9E /* AppDelegate.m */,
@@ -128,6 +138,8 @@
 				59FC2AA119DF9E7100B0F429 /* TCSettingViewController.m */,
 				59FC2AC219E0E4AE00B0F429 /* TCAssetManager.h */,
 				59FC2AC319E0E4AE00B0F429 /* TCAssetManager.m */,
+				599FBECE19E415AF00D9C363 /* TCImageHelper.h */,
+				599FBECF19E415AF00D9C363 /* TCImageHelper.m */,
 			);
 			path = TheCamera;
 			sourceTree = "<group>";
@@ -156,6 +168,17 @@
 				593B8AED19DE4AC80078FD9E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		599FBEC319E3A51200D9C363 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				599FBEC419E3A54700D9C363 /* TCAssetCacheManager.h */,
+				599FBEC519E3A54700D9C363 /* TCAssetCacheManager.m */,
+				599FBEC719E3A57900D9C363 /* TCAsset.h */,
+				599FBEC819E3A57900D9C363 /* TCAsset.m */,
+			);
+			name = Cache;
 			sourceTree = "<group>";
 		};
 		59FC2AA619DFE96F00B0F429 /* PhotoPicker */ = {
@@ -302,14 +325,17 @@
 				59FC2A9119DEBF8100B0F429 /* TCCameraView.m in Sources */,
 				59FC2AAF19DFEA0D00B0F429 /* CTAssetsViewCell.m in Sources */,
 				593B8ADB19DE4AC80078FD9E /* TCCameraViewController.m in Sources */,
+				599FBEC619E3A54700D9C363 /* TCAssetCacheManager.m in Sources */,
 				59FC2AC119DFEB3F00B0F429 /* NSDateFormatter+timeIntervalFormatter.m in Sources */,
 				59FC2AB219DFEA5100B0F429 /* CTAssetsSupplementaryView.m in Sources */,
+				599FBEC919E3A57900D9C363 /* TCAsset.m in Sources */,
 				59FC2AAC19DFE9BB00B0F429 /* CTAssetsPickerConstants.m in Sources */,
 				59FC2A9F19DEF0FE00B0F429 /* TCCameraPreview.m in Sources */,
 				59FC2AC419E0E4AE00B0F429 /* TCAssetManager.m in Sources */,
 				593B8AD819DE4AC80078FD9E /* AppDelegate.m in Sources */,
 				59FC2AA919DFE98500B0F429 /* CTAssetsViewController.m in Sources */,
 				59FC2A9719DED86C00B0F429 /* TCCameraEngine.m in Sources */,
+				599FBED019E415AF00D9C363 /* TCImageHelper.m in Sources */,
 				59FC2ABD19DFEAE300B0F429 /* ALAsset+isEqual.m in Sources */,
 				593B8AD519DE4AC80078FD9E /* main.m in Sources */,
 				59FC2ABE19DFEAE300B0F429 /* ALAssetsGroup+isEqual.m in Sources */,
