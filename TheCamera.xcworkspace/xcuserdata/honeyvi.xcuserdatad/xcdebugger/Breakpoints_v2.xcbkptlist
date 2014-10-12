@@ -23,13 +23,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TheCamera/PhotoPicker/CTAssetsViewController.m"
-            timestampString = "434379124.99431"
+            filePath = "TheCamera/Cache/TCAssetCacheManager.m"
+            timestampString = "434781069.62768"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "372"
-            endingLineNumber = "372"
-            landmarkName = "-collectionView:viewForSupplementaryElementOfKind:atIndexPath:"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "-cacheImageData:metaData:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -39,13 +39,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "TheCamera/Cache/TCAssetCacheManager.m"
-            timestampString = "434379234.484414"
+            filePath = "TheCamera/PhotoPicker/CTAssetsViewController.m"
+            timestampString = "434812306.648931"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "-init"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
+            landmarkName = "-collectionView:didDeselectItemAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TheCamera/TCImageViewController.m"
+            timestampString = "434816305.181075"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "-onTapAct:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

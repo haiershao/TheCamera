@@ -17,6 +17,7 @@
 		599FBEC619E3A54700D9C363 /* TCAssetCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBEC519E3A54700D9C363 /* TCAssetCacheManager.m */; };
 		599FBEC919E3A57900D9C363 /* TCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBEC819E3A57900D9C363 /* TCAsset.m */; };
 		599FBED019E415AF00D9C363 /* TCImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBECF19E415AF00D9C363 /* TCImageHelper.m */; };
+		599FBED419EAAF6900D9C363 /* TCImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBED219EAAF6900D9C363 /* TCImageViewController.m */; };
 		59FC2A9119DEBF8100B0F429 /* TCCameraView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FC2A9019DEBF8100B0F429 /* TCCameraView.m */; };
 		59FC2A9719DED86C00B0F429 /* TCCameraEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FC2A9619DED86C00B0F429 /* TCCameraEngine.m */; };
 		59FC2A9F19DEF0FE00B0F429 /* TCCameraPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = 59FC2A9E19DEF0FE00B0F429 /* TCCameraPreview.m */; };
@@ -53,6 +54,8 @@
 		599FBEC819E3A57900D9C363 /* TCAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCAsset.m; path = Cache/TCAsset.m; sourceTree = "<group>"; };
 		599FBECE19E415AF00D9C363 /* TCImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCImageHelper.h; sourceTree = "<group>"; };
 		599FBECF19E415AF00D9C363 /* TCImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCImageHelper.m; sourceTree = "<group>"; };
+		599FBED119EAAF6900D9C363 /* TCImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCImageViewController.h; sourceTree = "<group>"; };
+		599FBED219EAAF6900D9C363 /* TCImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCImageViewController.m; sourceTree = "<group>"; };
 		59FC2A8F19DEBF8100B0F429 /* TCCameraView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCCameraView.h; sourceTree = "<group>"; };
 		59FC2A9019DEBF8100B0F429 /* TCCameraView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCCameraView.m; sourceTree = "<group>"; };
 		59FC2A9619DED86C00B0F429 /* TCCameraEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCCameraEngine.m; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				59FC2AC319E0E4AE00B0F429 /* TCAssetManager.m */,
 				599FBECE19E415AF00D9C363 /* TCImageHelper.h */,
 				599FBECF19E415AF00D9C363 /* TCImageHelper.m */,
+				599FBED119EAAF6900D9C363 /* TCImageViewController.h */,
+				599FBED219EAAF6900D9C363 /* TCImageViewController.m */,
 			);
 			path = TheCamera;
 			sourceTree = "<group>";
@@ -334,6 +339,7 @@
 				59FC2AC419E0E4AE00B0F429 /* TCAssetManager.m in Sources */,
 				593B8AD819DE4AC80078FD9E /* AppDelegate.m in Sources */,
 				59FC2AA919DFE98500B0F429 /* CTAssetsViewController.m in Sources */,
+				599FBED419EAAF6900D9C363 /* TCImageViewController.m in Sources */,
 				59FC2A9719DED86C00B0F429 /* TCCameraEngine.m in Sources */,
 				599FBED019E415AF00D9C363 /* TCImageHelper.m in Sources */,
 				59FC2ABD19DFEAE300B0F429 /* ALAsset+isEqual.m in Sources */,

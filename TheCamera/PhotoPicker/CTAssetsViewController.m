@@ -34,6 +34,7 @@
 //#import "CTAssetsViewControllerTransition.h"
 #import "TCAssetManager.h"
 #import "TCAssetCacheManager.h"
+#import "TCImageViewController.h"
 
 NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPickerSelectedAssetsChangedNotification";
 
@@ -403,12 +404,16 @@ NSString * const TCAssetsSupplementaryHeaderIdentifier = @"TCAssetsSupplementary
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
-    
-//    [self.picker selectAsset:asset];
-//    
-//    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:didSelectAsset:)])
-//        [self.picker.delegate assetsPickerController:self.picker didSelectAsset:asset];
+    if (indexPath.section == 0) {
+        ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
+        CGImageRef imageRef = asset.defaultRepresentation.fullScreenImage;
+        UIImage *image = [UIImage imageWithCGImage:imageRef];
+        TCImageViewController *controller = [[TCImageViewController alloc] init];
+        controller.image = image;
+        
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self presentViewController:navController animated:YES completion:nil];
+    }
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -433,7 +438,6 @@ NSString * const TCAssetsSupplementaryHeaderIdentifier = @"TCAssetsSupplementary
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return NO;
 //    ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
     
 //    if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldHighlightAsset:)])

@@ -40,6 +40,9 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) UIImage *videoImage;
 
+@property (nonatomic, strong) UIView *selectedView;
+@property (nonatomic, assign) BOOL isTCAsset;
+
 @end
 
 
@@ -75,9 +78,15 @@ static UIColor *disabledColor;
         self.isAccessibilityElement = YES;
         self.accessibilityTraits    = UIAccessibilityTraitImage;
         self.enabled                = YES;
+        [self createSelectedView];
     }
     
     return self;
+}
+
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
 }
 
 - (void)bind:(ALAsset *)asset
@@ -90,16 +99,27 @@ static UIColor *disabledColor;
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         self.title = [df stringFromTimeInterval:[[asset valueForProperty:ALAssetPropertyDuration] doubleValue]];
     }
+    
+    self.isTCAsset = NO;
 }
 
 - (void)bindLocalAsset:(TCAsset *)asset
 {
     self.image = asset.thumbImage;
+    self.isTCAsset = YES;
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
+    if (selected) {
+        self.selectedView.hidden = NO;
+        [self bringSubviewToFront:self.selectedView];
+    }
+    else {
+        self.selectedView.hidden = YES;
+    }
+    
     [self setNeedsDisplay];
 }
 
@@ -182,6 +202,35 @@ static UIColor *disabledColor;
     [checkedIcon drawAtPoint:CGPointMake(CGRectGetMaxX(rect) - checkedIcon.size.width, CGRectGetMinY(rect))];
 }
 
+- (void)createSelectedView
+{
+//    self.selectedView = [[UIView alloc] initWithFrame:self.bounds];
+//    CGRect btnFrame = CGRectMake(0, 0, 30, 30);
+//    
+//    UIButton *zoomInBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    zoomInBtn.frame = btnFrame;
+//    zoomInBtn.center = CGPointMake(self.selectedView.bounds.size.width - 15, 15);
+//    [zoomInBtn setTitle:@"+" forState:UIControlStateNormal];
+//    [self.selectedView addSubview:zoomInBtn];
+//    
+//    UIButton *infoBtn = [UIButton buttonWithType:UIButtonTypeInfoLight];
+//    infoBtn.center = CGPointMake(self.selectedView.bounds.size.width - 15, self.selectedView.bounds.size.height - 15);
+//    [self.selectedView addSubview:infoBtn];
+//    
+//    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    shareBtn.frame = btnFrame;
+//    [shareBtn setTitle:@"分享" forState:UIControlStateNormal];
+//    shareBtn.center = CGPointMake(15, self.selectedView.bounds.size.height - 15);
+//    [self.selectedView addSubview:shareBtn];
+//    
+//    UIButton *delBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [delBtn setTitle:@"删除" forState:UIControlStateNormal];
+//    delBtn.center = CGPointMake(15, 15);
+//    [self.selectedView addSubview:delBtn];
+//    
+//    [self addSubview:self.selectedView];
+//    self.selectedView.hidden = YES;
+}
 
 #pragma mark - Accessibility Label
 
