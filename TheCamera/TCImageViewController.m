@@ -21,8 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancelAct)];
-    self.navigationItem.leftBarButtonItem = cancelItem;
+    [self setupNaviItems];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -42,6 +41,52 @@
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapAct:)];
     [self.scrollView addGestureRecognizer:tapGesture];
+}
+
+- (void)setupNaviItems
+{
+    UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancelAct)];
+    self.navigationItem.leftBarButtonItem = cancelItem;
+    
+    UIView *rightItemsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, self.navigationController.navigationBar.bounds.size.height)];
+    rightItemsView.backgroundColor = [UIColor clearColor];
+    float offsetX = 0;
+    static float btnWith = 30.0f;
+    static float btnGap = 10.0f;
+    
+    if (self.canDelete) {
+        UIButton *delBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [delBtn addTarget:self action:@selector(onDeleteAct) forControlEvents:UIControlEventTouchUpInside];
+        [delBtn setTitle:@"Del" forState:UIControlStateNormal];
+        delBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
+        offsetX += (btnWith + btnGap);
+        [rightItemsView addSubview:delBtn];
+    }
+    
+    UIButton *clipBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [clipBtn addTarget:self action:@selector(onClipAct) forControlEvents:UIControlEventTouchUpInside];
+    [clipBtn setTitle:@"Clip" forState:UIControlStateNormal];
+    clipBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
+    [clipBtn sizeToFit];
+    offsetX += (btnWith + btnGap);
+    [rightItemsView addSubview:clipBtn];
+    
+    UIButton *infoBtn = [UIButton buttonWithType:UIButtonTypeInfoLight];
+    [infoBtn addTarget:self action:@selector(onInfoAct) forControlEvents:UIControlEventTouchUpInside];
+    infoBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
+    [infoBtn sizeToFit];
+    offsetX += (btnWith + btnGap);
+    [rightItemsView addSubview:infoBtn];
+    
+    UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [saveBtn addTarget:self action:@selector(onSaveAct) forControlEvents:UIControlEventTouchUpInside];
+    [saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+    saveBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
+    [saveBtn sizeToFit];
+    [rightItemsView addSubview:saveBtn];
+    
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightItemsView];
+    self.navigationItem.rightBarButtonItem = rightItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,6 +145,26 @@
 {
     _image = image;
     self.imageView.image = image;
+}
+
+- (void)onDeleteAct
+{
+    
+}
+
+- (void)onClipAct
+{
+    
+}
+
+- (void)onInfoAct
+{
+    
+}
+
+- (void)onSaveAct
+{
+    
 }
 
 @end

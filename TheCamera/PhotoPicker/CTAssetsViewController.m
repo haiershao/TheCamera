@@ -35,6 +35,7 @@
 #import "TCAssetManager.h"
 #import "TCAssetCacheManager.h"
 #import "TCImageViewController.h"
+#import "TCAsset.h"
 
 NSString * const CTAssetsPickerSelectedAssetsChangedNotification = @"CTAssetsPickerSelectedAssetsChangedNotification";
 
@@ -404,16 +405,32 @@ NSString * const TCAssetsSupplementaryHeaderIdentifier = @"TCAssetsSupplementary
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIImage *image = nil;
+    
     if (indexPath.section == 0) {
+        if (indexPath.row >= self.assets.count) {
+            return;
+        }
         ALAsset *asset = [self.assets objectAtIndex:indexPath.row];
         CGImageRef imageRef = asset.defaultRepresentation.fullScreenImage;
-        UIImage *image = [UIImage imageWithCGImage:imageRef];
-        TCImageViewController *controller = [[TCImageViewController alloc] init];
-        controller.image = image;
-        
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
-        [self presentViewController:navController animated:YES completion:nil];
+        image = [UIImage imageWithCGImage:imageRef];
+       
     }
+    else if (indexPath.section == 1) {
+        NSArray *assetList = [TCAssetCacheManager defaultManager].assetList;
+        if (indexPath.row >= assetList.count) {
+            return;
+        }
+        
+        TCAsset *asset = assetList[indexPath.row];
+        image = asset.originalImage;
+    }
+    
+    TCImageViewController *controller = [[TCImageViewController alloc] init];
+    controller.image = image;
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath

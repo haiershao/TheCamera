@@ -40,11 +40,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TheCamera/PhotoPicker/CTAssetsViewController.m"
-            timestampString = "434812306.648931"
+            timestampString = "434819334.760181"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "431"
-            endingLineNumber = "431"
+            startingLineNumber = "448"
+            endingLineNumber = "448"
             landmarkName = "-collectionView:didDeselectItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -56,11 +56,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TheCamera/TCImageViewController.m"
-            timestampString = "434816305.181075"
+            timestampString = "434848353.367552"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "-onTapAct:"
             landmarkType = "5">
          </BreakpointContent>
