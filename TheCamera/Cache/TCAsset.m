@@ -36,13 +36,21 @@
     return self;
 }
 
+- (NSString *)dataPath
+{
+    return [_path stringByAppendingFormat:@"/%@.jpg", _assetID];
+}
+
+- (NSString *)thumbPath
+{
+    return [_path stringByAppendingFormat:@"/%@_thumb.jpg", _assetID];
+}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
-    [aCoder encodeObject:self.dataPath forKey:@"dataPath"];
     [aCoder encodeObject:self.metaData forKey:@"metaData"];
     [aCoder encodeDouble:self.timeInterval forKey:@"timeInterval"];
-    [aCoder encodeObject:self.thumbPath forKey:@"thumbPath"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -50,10 +58,9 @@
     self = [super init];
     if (self) {
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
-        self.dataPath = [aDecoder decodeObjectForKey:@"dataPath"];
         self.metaData = [aDecoder decodeObjectForKey:@"metaData"];
         self.timeInterval = [aDecoder decodeDoubleForKey:@"timeInterval"];
-        self.thumbPath = [aDecoder decodeObjectForKey:@"thumbPath"];
+        _path = [[TCAssetCacheManager rootPath] stringByAppendingPathComponent:@"photos"];
     }
     return self;
 }

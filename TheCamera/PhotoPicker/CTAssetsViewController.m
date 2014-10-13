@@ -296,6 +296,8 @@ NSString * const TCAssetsSupplementaryHeaderIdentifier = @"TCAssetsSupplementary
         [TCAssetCacheManager defaultManager].assetList.count > 0)
     {
         [self.collectionView reloadData];
+//        UICollectionView *v = (UICollectionView *)self.view;
+//        NSLog(@"%f", v.contentSize.height);
         [self.collectionView setContentOffset:CGPointMake(0, self.collectionViewLayout.collectionViewContentSize.height)];
     }
     else
@@ -303,7 +305,6 @@ NSString * const TCAssetsSupplementaryHeaderIdentifier = @"TCAssetsSupplementary
         [self showNoAssets];
     }
 }
-
 
 #pragma mark - No assets
 

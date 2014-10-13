@@ -48,16 +48,18 @@
     UIBarButtonItem *cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(onCancelAct)];
     self.navigationItem.leftBarButtonItem = cancelItem;
     
-    UIView *rightItemsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, self.navigationController.navigationBar.bounds.size.height)];
+    UIView *rightItemsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, self.navigationController.navigationBar.bounds.size.height)];
     rightItemsView.backgroundColor = [UIColor clearColor];
     float offsetX = 0;
     static float btnWith = 30.0f;
     static float btnGap = 10.0f;
     
     if (self.canDelete) {
+        rightItemsView.frame = CGRectMake(0, 0, 120, self.navigationController.navigationBar.bounds.size.height);
         UIButton *delBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [delBtn addTarget:self action:@selector(onDeleteAct) forControlEvents:UIControlEventTouchUpInside];
         [delBtn setTitle:@"Del" forState:UIControlStateNormal];
+        delBtn.titleLabel.font = [UIFont systemFontOfSize:13];
         delBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
         offsetX += (btnWith + btnGap);
         [rightItemsView addSubview:delBtn];
@@ -66,23 +68,23 @@
     UIButton *clipBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [clipBtn addTarget:self action:@selector(onClipAct) forControlEvents:UIControlEventTouchUpInside];
     [clipBtn setTitle:@"Clip" forState:UIControlStateNormal];
+    clipBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     clipBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
-    [clipBtn sizeToFit];
     offsetX += (btnWith + btnGap);
     [rightItemsView addSubview:clipBtn];
     
     UIButton *infoBtn = [UIButton buttonWithType:UIButtonTypeInfoLight];
     [infoBtn addTarget:self action:@selector(onInfoAct) forControlEvents:UIControlEventTouchUpInside];
     infoBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
-    [infoBtn sizeToFit];
+    infoBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     offsetX += (btnWith + btnGap);
     [rightItemsView addSubview:infoBtn];
     
     UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [saveBtn addTarget:self action:@selector(onSaveAct) forControlEvents:UIControlEventTouchUpInside];
     [saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+    saveBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     saveBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
-    [saveBtn sizeToFit];
     [rightItemsView addSubview:saveBtn];
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightItemsView];

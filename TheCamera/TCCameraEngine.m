@@ -42,6 +42,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (self) {
         
         _session = [[AVCaptureSession alloc] init];
+        _session.sessionPreset = AVCaptureSessionPresetPhoto;
         _preview = [[TCCameraPreview alloc] init];
         _preview.session = _session;
         [self checkDeviceAuthorizationStatus];
