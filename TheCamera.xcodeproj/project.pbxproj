@@ -14,6 +14,7 @@
 		593B8ADE19DE4AC80078FD9E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 593B8ADC19DE4AC80078FD9E /* Main.storyboard */; };
 		593B8AE019DE4AC80078FD9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 593B8ADF19DE4AC80078FD9E /* Images.xcassets */; };
 		593B8AE319DE4AC80078FD9E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 593B8AE119DE4AC80078FD9E /* LaunchScreen.xib */; };
+		596F88D819EF39E000C1A222 /* camera_focus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 596F88D719EF39E000C1A222 /* camera_focus@2x.png */; };
 		599FBEC619E3A54700D9C363 /* TCAssetCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBEC519E3A54700D9C363 /* TCAssetCacheManager.m */; };
 		599FBEC919E3A57900D9C363 /* TCAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBEC819E3A57900D9C363 /* TCAsset.m */; };
 		599FBED019E415AF00D9C363 /* TCImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 599FBECF19E415AF00D9C363 /* TCImageHelper.m */; };
@@ -49,6 +50,7 @@
 		593B8AE219DE4AC80078FD9E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		593B8AED19DE4AC80078FD9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		593B8AEE19DE4AC80078FD9E /* TheCameraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TheCameraTests.m; sourceTree = "<group>"; };
+		596F88D719EF39E000C1A222 /* camera_focus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera_focus@2x.png"; path = "Resources/camera_focus@2x.png"; sourceTree = "<group>"; };
 		599FBEC419E3A54700D9C363 /* TCAssetCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCAssetCacheManager.h; path = Cache/TCAssetCacheManager.h; sourceTree = "<group>"; };
 		599FBEC519E3A54700D9C363 /* TCAssetCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCAssetCacheManager.m; path = Cache/TCAssetCacheManager.m; sourceTree = "<group>"; };
 		599FBEC719E3A57900D9C363 /* TCAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCAsset.h; path = Cache/TCAsset.h; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				593B8AD119DE4AC80078FD9E /* TheCamera */,
 				593B8AEB19DE4AC80078FD9E /* TheCameraTests */,
 				593B8AD019DE4AC80078FD9E /* Products */,
+				596F88D619EF39CE00C1A222 /* Resources */,
 				9611696DC42C47C480EA9B5B /* Pods.xcconfig */,
 				826DC7144DBC4588AD328D38 /* Frameworks */,
 			);
@@ -178,6 +181,14 @@
 				593B8AED19DE4AC80078FD9E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		596F88D619EF39CE00C1A222 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				596F88D719EF39E000C1A222 /* camera_focus@2x.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		599FBEC319E3A51200D9C363 /* Cache */ = {
@@ -283,6 +294,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				596F88D819EF39E000C1A222 /* camera_focus@2x.png in Resources */,
 				593B8ADE19DE4AC80078FD9E /* Main.storyboard in Resources */,
 				593B8AE319DE4AC80078FD9E /* LaunchScreen.xib in Resources */,
 				593B8AE019DE4AC80078FD9E /* Images.xcassets in Resources */,

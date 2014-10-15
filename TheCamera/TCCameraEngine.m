@@ -20,6 +20,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 
 @property (nonatomic, assign) BOOL isDeviceAuthorized;
+@property (nonatomic, strong) UIImageView *focusImageView;
 
 @end
 
@@ -47,6 +48,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         _session.sessionPreset = AVCaptureSessionPresetPhoto;
         _preview = [[TCCameraPreview alloc] init];
         _preview.session = _session;
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focusAndExposeTap:)];
+        [_preview addGestureRecognizer:tapGesture];
+        
         [self checkDeviceAuthorizationStatus];
         
         _sessionQueue = dispatch_queue_create("TCCamerHelperSessionQueue", DISPATCH_QUEUE_SERIAL);
@@ -237,6 +242,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
+- (void)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[self.preview layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
+    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+}
+
 - (void)setFocusAndExposedPonit:(CGPoint)point
 {
     [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:point monitorSubjectAreaChange:YES];
@@ -278,6 +289,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)focusWithMode:(AVCaptureFocusMode)focusMode exposeWithMode:(AVCaptureExposureMode)exposureMode atDevicePoint:(CGPoint)point monitorSubjectAreaChange:(BOOL)monitorSubjectAreaChange
 {
+    [self setFocusIconAt:point];
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *device = [[self videoDeviceInput] device];
         NSError *error = nil;
@@ -301,6 +313,29 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             NSLog(@"%@", error);
         }
     });
+}
+
+- (void)setFocusIconAt:(CGPoint)point
+{
+    if (!self.focusImageView) {
+        UIImage *focusImage = [UIImage imageNamed:@"camera_focus.png"];
+        self.focusImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, focusImage.size.width, focusImage.size.height)];
+        self.focusImageView.image = focusImage;
+        self.focusImageView.backgroundColor = [UIColor clearColor];
+        [self.preview addSubview:self.focusImageView];
+        self.focusImageView.hidden = YES;
+    }
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideFocusIcon) object:nil];
+    self.focusImageView.center = CGPointMake(point.x * self.preview.bounds.size.width, point.y * self.preview.bounds.size.height);
+    [self.preview bringSubviewToFront:self.focusImageView];
+    self.focusImageView.hidden = NO;
+    [self performSelector:@selector(hideFocusIcon) withObject:nil afterDelay:2.0f];
+}
+
+- (void)hideFocusIcon
+{
+    self.focusImageView.hidden = YES;
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
