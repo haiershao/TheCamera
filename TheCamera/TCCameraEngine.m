@@ -27,19 +27,22 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 + (id)sharedInstance
 {
+#if !TARGET_IPHONE_SIMULATOR
     static TCCameraEngine *cameraHelper = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^(void) {
         cameraHelper = [[TCCameraEngine alloc] init];
     });
     return cameraHelper;
+#else
+    return nil;
+#endif
 }
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        
         _session = [[AVCaptureSession alloc] init];
         _session.sessionPreset = AVCaptureSessionPresetPhoto;
         _preview = [[TCCameraPreview alloc] init];
