@@ -14,6 +14,8 @@
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (nonatomic, assign) BOOL navbarHidden;
 
+@property (nonatomic, strong) UIButton *saveBtn;
+
 @end
 
 @implementation TCImageViewController
@@ -34,7 +36,7 @@
     self.imageView = [[UIImageView alloc] initWithFrame:self.scrollView.bounds];
     self.imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.imageView.backgroundColor = [UIColor blackColor];
+    self.imageView.backgroundColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.imageView];
     
     self.imageView.image = self.image;
@@ -80,12 +82,12 @@
     offsetX += (btnWith + btnGap);
     [rightItemsView addSubview:infoBtn];
     
-    UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [saveBtn addTarget:self action:@selector(onSaveAct) forControlEvents:UIControlEventTouchUpInside];
-    [saveBtn setTitle:@"Save" forState:UIControlStateNormal];
-    saveBtn.titleLabel.font = [UIFont systemFontOfSize:13];
-    saveBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
-    [rightItemsView addSubview:saveBtn];
+    self.saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.saveBtn addTarget:self action:@selector(onSaveAct) forControlEvents:UIControlEventTouchUpInside];
+    [self.saveBtn setTitle:@"Save" forState:UIControlStateNormal];
+    self.saveBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    self.saveBtn.frame = CGRectMake(offsetX, 0, btnWith, rightItemsView.bounds.size.height);
+    [rightItemsView addSubview:self.saveBtn];
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightItemsView];
     self.navigationItem.rightBarButtonItem = rightItem;
@@ -166,7 +168,13 @@
 
 - (void)onSaveAct
 {
-    
+    UIImageWriteToSavedPhotosAlbum(self.image, nil, nil, NULL);
+    self.saveBtn.enabled = NO;
+}
+
+- (void)onSaveActFinish
+{
+    NSLog(@"已写入");
 }
 
 @end

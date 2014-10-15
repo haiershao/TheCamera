@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 @class TCCameraPreview;
 @protocol TCCameraHelperDelegate;
@@ -15,6 +16,7 @@
 
 @property (nonatomic, readonly) TCCameraPreview *preview;
 @property (nonatomic, weak) id<TCCameraHelperDelegate> delegate;
+@property (nonatomic, assign) AVCaptureFlashMode currentFlashMode;
 
 + (TCCameraEngine *)sharedInstance;
 - (void)changeCameraWithCompletion:(void (^)(void))completion;

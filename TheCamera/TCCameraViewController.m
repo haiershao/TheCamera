@@ -27,9 +27,10 @@
     
     TCCameraEngine *cameraEngine = [TCCameraEngine sharedInstance];
     cameraEngine.delegate = self;
-    cameraEngine.preview.frame = self.view.bounds;
+    cameraEngine.preview.frame = CGRectMake(-25, 0, self.view.bounds.size.width + 50, self.view.bounds.size.height);
     cameraEngine.preview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:cameraEngine.preview atIndex:0];
+    [cameraEngine setCurrentFlashMode:AVCaptureFlashModeOn];
 }
 
 - (void)didReceiveMemoryWarning {

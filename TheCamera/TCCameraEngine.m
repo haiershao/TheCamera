@@ -7,7 +7,6 @@
 //
 
 #import "TCCameraEngine.h"
-#import <AVFoundation/AVFoundation.h>
 #import "TCCameraPreview.h"
 
 static void * CapturingStillImageContext = &CapturingStillImageContext;
@@ -88,7 +87,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (self.session.isRunning) {
         return;
     }
-    
+
     dispatch_async([self sessionQueue], ^{
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
         [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
@@ -152,27 +151,33 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return [[self session] isRunning] && [self isDeviceAuthorized];
 }
 
+- (AVCaptureDevice *)currentCaptureDevice
+{
+    AVCaptureDevice *currentVideoDevice = [self.videoDeviceInput device];
+    AVCaptureDevicePosition preferredPosition = AVCaptureDevicePositionUnspecified;
+    AVCaptureDevicePosition currentPosition = [currentVideoDevice position];
+    
+    switch (currentPosition)
+    {
+        case AVCaptureDevicePositionUnspecified:
+            preferredPosition = AVCaptureDevicePositionBack;
+            break;
+        case AVCaptureDevicePositionBack:
+            preferredPosition = AVCaptureDevicePositionFront;
+            break;
+        case AVCaptureDevicePositionFront:
+            preferredPosition = AVCaptureDevicePositionBack;
+            break;
+    }
+    
+    return [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:preferredPosition];
+}
+
 - (void)changeCameraWithCompletion:(void (^)(void))completion
 {
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *currentVideoDevice = [self.videoDeviceInput device];
-        AVCaptureDevicePosition preferredPosition = AVCaptureDevicePositionUnspecified;
-        AVCaptureDevicePosition currentPosition = [currentVideoDevice position];
-        
-        switch (currentPosition)
-        {
-            case AVCaptureDevicePositionUnspecified:
-                preferredPosition = AVCaptureDevicePositionBack;
-                break;
-            case AVCaptureDevicePositionBack:
-                preferredPosition = AVCaptureDevicePositionFront;
-                break;
-            case AVCaptureDevicePositionFront:
-                preferredPosition = AVCaptureDevicePositionBack;
-                break;
-        }
-        
-        AVCaptureDevice *videoDevice = [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:preferredPosition];
+        AVCaptureDevice *videoDevice = [self currentCaptureDevice];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:nil];
         
         [[self session] beginConfiguration];
@@ -182,7 +187,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         {
             [[NSNotificationCenter defaultCenter] removeObserver:self name:AVCaptureDeviceSubjectAreaDidChangeNotification object:currentVideoDevice];
             
-            [self setFlashMode:AVCaptureFlashModeAuto forDevice:videoDevice];
+            [self setFlashMode:_currentFlashMode forDevice:videoDevice];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:videoDevice];
             
             [[self session] addInput:videoDeviceInput];
@@ -209,8 +214,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         // Update the orientation on the still image output video connection before capturing.
         [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[self.preview layer] connection] videoOrientation]];
         
-        // Flash set to Auto for Still Capture
-        [self setFlashMode:AVCaptureFlashModeAuto forDevice:[[self videoDeviceInput] device]];
+        [self setFlashMode:self.currentFlashMode forDevice:[[self videoDeviceInput] device]];
         
         // Capture a still image.
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
