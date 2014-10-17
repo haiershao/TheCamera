@@ -327,7 +327,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideFocusIcon) object:nil];
-    self.focusImageView.center = CGPointMake(point.x * self.preview.bounds.size.width, point.y * self.preview.bounds.size.height);
+    self.focusImageView.center = CGPointMake((1 - point.y) * self.preview.bounds.size.width, point.x * self.preview.bounds.size.height);
     [self.preview bringSubviewToFront:self.focusImageView];
     self.focusImageView.hidden = NO;
     [self performSelector:@selector(hideFocusIcon) withObject:nil afterDelay:2.0f];
