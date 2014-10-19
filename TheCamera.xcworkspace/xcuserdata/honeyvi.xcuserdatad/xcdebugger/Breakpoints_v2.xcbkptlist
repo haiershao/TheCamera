@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TheCamera/TCCameraViewController.m"
-            timestampString = "435075999.121959"
+            timestampString = "435372633.411658"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182">
+            startingLineNumber = "216"
+            endingLineNumber = "216">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -72,11 +72,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TheCamera/TCCameraViewController.m"
-            timestampString = "435075999.121959"
+            timestampString = "435372633.411658"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "-onFlashModeBtnAct:"
             landmarkType = "5">
          </BreakpointContent>
@@ -88,12 +88,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TheCamera/TCCameraEngine.m"
-            timestampString = "435109392.256431"
+            timestampString = "435403187.358249"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
-            landmarkName = "-setFocusIconAt:"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
+            landmarkName = "-subjectAreaDidChange:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TheCamera/TCCameraEngine.m"
+            timestampString = "435403187.358249"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "-focusAndExposeTap:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TheCamera/TCCameraEngine.m"
+            timestampString = "435403187.358249"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "-setFocusAndExposedPonit:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

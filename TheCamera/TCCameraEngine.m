@@ -100,6 +100,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
         [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
+        
+        [self test];
     });
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAVCaptureSessionRuntimeErrorNotification:) name:AVCaptureSessionRuntimeErrorNotification object:nil];
@@ -327,7 +329,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideFocusIcon) object:nil];
-    self.focusImageView.center = CGPointMake(point.x * self.preview.bounds.size.width, point.y * self.preview.bounds.size.height);
+    self.focusImageView.center = CGPointMake((1 - point.y) * self.preview.bounds.size.width, point.x * self.preview.bounds.size.height);
     [self.preview bringSubviewToFront:self.focusImageView];
     self.focusImageView.hidden = NO;
     [self performSelector:@selector(hideFocusIcon) withObject:nil afterDelay:2.0f];
@@ -375,6 +377,19 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                                change:change
                               context:context];
     }
+}
+
+- (void)test
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+//    AVCaptureWhiteBalanceGains whitebalance = device.deviceWhiteBalanceGains;
+//    AVCaptureWhiteBalanceChromaticityValues value = [device chromaticityValuesForDeviceWhiteBalanceGains:whitebalance];
+//    
+    AVCaptureWhiteBalanceTemperatureAndTintValues temp = [device temperatureAndTintValuesForDeviceWhiteBalanceGains:whitebalance];
+    
+    AVCaptureWhiteBalanceTemperatureAndTintValues toSetTemp = {5000, 100};
+    AVCaptureWhiteBalanceGains whitebalanceGains = [device deviceWhiteBalanceGainsForTemperatureAndTintValues:toSetTemp];
+    
 }
 
 @end

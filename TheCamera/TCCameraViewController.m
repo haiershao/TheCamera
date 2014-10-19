@@ -23,6 +23,10 @@
 @property (strong, nonatomic) UIView *coverView;
 @property (strong, nonatomic) TCCameraGridView *gridView;
 
+@property (weak, nonatomic) IBOutlet UIView *seniorControlBar;
+@property (assign, nonatomic) BOOL isControlBarHidden;
+@property (weak, nonatomic) IBOutlet UIButton *controlBarHiddenBtn;
+
 @end
 
 @implementation TCCameraViewController
@@ -44,6 +48,26 @@
     self.cameraEngine.preview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view insertSubview:self.cameraEngine.preview atIndex:0];
     [self setFlashMode:AVCaptureFlashModeAuto];
+    
+    self.isControlBarHidden = YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
+    [[TCCameraEngine sharedInstance] startRunning];
+    [self setButtonsEnabled:YES];
+    [self setControlBarHidden:self.isControlBarHidden animation:NO];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self setButtonsEnabled:NO];
+    [super viewDidDisappear:animated];
+    
+    [[TCCameraEngine sharedInstance] stopRunning];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,23 +96,6 @@
 - (BOOL)prefersStatusBarHidden
 {
     return YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
-    [[TCCameraEngine sharedInstance] startRunning];
-    [self setButtonsEnabled:YES];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [self setButtonsEnabled:NO];
-    [super viewDidDisappear:animated];
-    
-    [[TCCameraEngine sharedInstance] stopRunning];
 }
 
 - (IBAction)onSwitchCamera:(id)sender
@@ -174,6 +181,33 @@
         [self.gridView removeFromSuperview];
         self.gridView = nil;
     }
+}
+
+- (IBAction)onControlBarHiddenAct:(id)sender
+{
+    self.isControlBarHidden = !self.isControlBarHidden;
+    [self setControlBarHidden:self.isControlBarHidden animation:YES];
+}
+
+- (void)setControlBarHidden:(BOOL)hidden animation:(BOOL)animation
+{
+    CGRect frame = self.seniorControlBar.frame;
+    if (hidden) {
+        frame.origin.x = self.view.bounds.size.width;
+    }
+    else {
+        frame.origin.x = 0;
+    }
+    
+    if (!animation) {
+        self.seniorControlBar.frame = frame;
+    }
+    else {
+        [UIView animateWithDuration:0.2f animations:^(void) {
+            self.seniorControlBar.frame = frame;
+        }];
+    }
+    self.isControlBarHidden = hidden;
 }
 
 @end

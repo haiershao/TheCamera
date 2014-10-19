@@ -16,7 +16,8 @@
 
 @property (nonatomic, readonly) TCCameraPreview *preview;
 @property (nonatomic, weak) id<TCCameraHelperDelegate> delegate;
-@property (nonatomic, assign) AVCaptureFlashMode currentFlashMode;
+
+@property (nonatomic, assign) AVCaptureFlashMode currentFlashMode;//曝光模式
 
 + (TCCameraEngine *)sharedInstance;
 - (void)changeCameraWithCompletion:(void (^)(void))completion;
