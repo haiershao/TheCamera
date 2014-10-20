@@ -100,8 +100,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
         [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
-        
-        [self test];
     });
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAVCaptureSessionRuntimeErrorNotification:) name:AVCaptureSessionRuntimeErrorNotification object:nil];
@@ -379,17 +377,65 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-- (void)test
+#pragma mark - white balance
+
+- (void)setWhiteBalanceMode:(AVCaptureWhiteBalanceMode)whiteBalanceMode
 {
     AVCaptureDevice *device = [self currentCaptureDevice];
-//    AVCaptureWhiteBalanceGains whitebalance = device.deviceWhiteBalanceGains;
-//    AVCaptureWhiteBalanceChromaticityValues value = [device chromaticityValuesForDeviceWhiteBalanceGains:whitebalance];
-//    
-    AVCaptureWhiteBalanceTemperatureAndTintValues temp = [device temperatureAndTintValuesForDeviceWhiteBalanceGains:whitebalance];
+    NSError *error = nil;
+    [device lockForConfiguration:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+    }
     
-    AVCaptureWhiteBalanceTemperatureAndTintValues toSetTemp = {5000, 100};
-    AVCaptureWhiteBalanceGains whitebalanceGains = [device deviceWhiteBalanceGainsForTemperatureAndTintValues:toSetTemp];
+    @try {
+        [device setWhiteBalanceMode:whiteBalanceMode];
+
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception : %@", exception);
+        [device unlockForConfiguration];
+
+    }
+    [device unlockForConfiguration];
+}
+
+- (AVCaptureWhiteBalanceMode)whiteBalanceMode
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    return device.whiteBalanceMode;
+}
+
+- (void)setWhiteBalanceTemp:(float)whiteBalanceTemp
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    NSError *error = nil;
+    [device lockForConfiguration:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+    }
     
+    @try {
+        AVCaptureWhiteBalanceTemperatureAndTintValues temp = {whiteBalanceTemp, 100};
+        AVCaptureWhiteBalanceGains whitebalanceGains = [device deviceWhiteBalanceGainsForTemperatureAndTintValues:temp];
+        [device setWhiteBalanceModeLockedWithDeviceWhiteBalanceGains:whitebalanceGains completionHandler:^(CMTime time) {
+            
+        }];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+        [device unlockForConfiguration];
+    }
+    
+    [device unlockForConfiguration];
+}
+
+- (float)whiteBalanceTemp
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    AVCaptureWhiteBalanceGains whitebalanceGains = [device deviceWhiteBalanceGains];
+    NSLog(@"%f", [device temperatureAndTintValuesForDeviceWhiteBalanceGains:whitebalanceGains].tint);
+    return [device temperatureAndTintValuesForDeviceWhiteBalanceGains:whitebalanceGains].temperature;
 }
 
 @end

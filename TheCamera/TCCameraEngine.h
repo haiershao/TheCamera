@@ -17,7 +17,12 @@
 @property (nonatomic, readonly) TCCameraPreview *preview;
 @property (nonatomic, weak) id<TCCameraHelperDelegate> delegate;
 
+//曝光
 @property (nonatomic, assign) AVCaptureFlashMode currentFlashMode;//曝光模式
+
+//白平衡
+@property (nonatomic, assign) AVCaptureWhiteBalanceMode whiteBalanceMode;
+@property (nonatomic, assign) float whiteBalanceTemp;
 
 + (TCCameraEngine *)sharedInstance;
 - (void)changeCameraWithCompletion:(void (^)(void))completion;

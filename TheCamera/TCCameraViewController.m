@@ -50,7 +50,17 @@
     [self setFlashMode:AVCaptureFlashModeAuto];
     
     self.isControlBarHidden = YES;
+    
+    self.cameraEngine.whiteBalanceTemp = 4000;
+    self.cameraEngine.whiteBalanceMode = AVCaptureWhiteBalanceModeLocked;
+    [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(test) userInfo:nil repeats:YES];
 }
+
+- (void)test
+{
+    NSLog(@"%f", self.cameraEngine.whiteBalanceTemp);
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
