@@ -23,6 +23,11 @@
 @property (strong, nonatomic) UIView *coverView;
 @property (strong, nonatomic) TCCameraGridView *gridView;
 
+@property (weak, nonatomic) IBOutlet UIView *shutterView;
+@property (weak, nonatomic) IBOutlet UIView *ISOView;
+@property (weak, nonatomic) IBOutlet UILabel *shutterLabel;
+@property (weak, nonatomic) IBOutlet UILabel *ISOLabel;
+
 @property (weak, nonatomic) IBOutlet UIView *seniorControlBar;
 @property (assign, nonatomic) BOOL isControlBarHidden;
 @property (weak, nonatomic) IBOutlet UIButton *controlBarHiddenBtn;
@@ -53,14 +58,10 @@
     
     self.cameraEngine.whiteBalanceTemp = 4000;
     self.cameraEngine.whiteBalanceMode = AVCaptureWhiteBalanceModeLocked;
-    [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(test) userInfo:nil repeats:YES];
+    
+    self.ISOView.hidden = YES;
+    self.shutterView.hidden = YES;
 }
-
-- (void)test
-{
-    NSLog(@"%f", self.cameraEngine.whiteBalanceTemp);
-}
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -127,38 +128,52 @@
 
 - (IBAction)onFlashModeBtnAct:(id)sender
 {
-    self.flashModeSwitchView.hidden = !self.flashModeSwitchView.hidden;
-    if (!self.flashModeSwitchView.hidden) {
-        [self.view addSubview:self.coverView];
-        [self.view bringSubviewToFront:self.coverView];
+    [self setCoverViewHidden:!self.flashModeSwitchView.hidden];
+    [self setFlashSwitchViewHidden:!self.flashModeSwitchView.hidden];
+}
+
+- (void)setFlashSwitchViewHidden:(BOOL)hidden
+{
+    self.flashModeSwitchView.hidden = hidden;
+    [self setCoverViewHidden:hidden];
+    if (!hidden) {
         [self.view bringSubviewToFront:self.flashModeSwitchView];
     }
-    else {
+}
+
+- (void)setCoverViewHidden:(BOOL)hidden
+{
+    if (hidden) {
         [self.coverView removeFromSuperview];
+    }
+    else {
+        [self.view addSubview:self.coverView];
+        [self.view bringSubviewToFront:self.coverView];
     }
 }
 
 - (void)onTap
 {
-    [self onFlashModeBtnAct:nil];
+    [self setFlashSwitchViewHidden:YES];
+    [self setCoverViewHidden:YES];
 }
 
 - (IBAction)onFlashOff:(id)sender
 {
     [self setFlashMode:AVCaptureFlashModeOff];
-    self.flashModeSwitchView.hidden = YES;
+    [self setFlashSwitchViewHidden:YES];
 }
 
 - (IBAction)onFlashOn:(id)sender
 {
     [self setFlashMode:AVCaptureFlashModeOn];
-    self.flashModeSwitchView.hidden = YES;
+    [self setFlashSwitchViewHidden:YES];
 }
 
 - (IBAction)onFlashAuto:(id)sender
 {
     [self setFlashMode:AVCaptureFlashModeAuto];
-    self.flashModeSwitchView.hidden = YES;
+    [self setFlashSwitchViewHidden:YES];
 }
 
 - (void)setFlashMode:(AVCaptureFlashMode)model
@@ -218,6 +233,86 @@
         }];
     }
     self.isControlBarHidden = hidden;
+}
+
+#pragma  mark - ISO
+
+- (void)setISOViewHidden:(BOOL)hidden
+{
+    self.ISOView.hidden = hidden;
+}
+
+
+- (IBAction)onISOAct:(id)sender
+{
+    [self setISOViewHidden:!self.ISOView.hidden];
+}
+
+- (IBAction)onISOSelected:(id)sender
+{
+    //    [self setISOViewHidden:YES];
+    UIButton *btn = sender;
+    self.ISOLabel.text = [NSString stringWithFormat:@"%d", btn.tag];
+    [self setCurrentISOValue:btn.tag];
+    self.ISOLabel.textColor = [UIColor blueColor];
+}
+
+- (void)setCurrentISOValue:(NSInteger)ISOValue
+{
+    NSLog(@"setCurrentISOValue: %d", ISOValue);
+}
+
+- (NSInteger)currentISOValue
+{
+    return 0;
+}
+
+#pragma mark - shutter
+
+- (void)setShutterViewHidden:(BOOL)hidden
+{
+    self.shutterView.hidden = hidden;
+}
+
+- (IBAction)onShutterSpeedAct:(id)sender
+{
+    [self setShutterViewHidden:!self.shutterView.hidden];
+}
+
+- (IBAction)onShutterSpeedSelected:(id)sender
+{
+//    [self setShutterViewHidden:YES];
+    float shutterSpeed = 0;
+    UIButton *btn = sender;
+    if (btn.tag == 1 || btn.tag == 0) {
+        shutterSpeed = 1.0f;
+        self.shutterLabel.text = @"1";
+    }
+    else {
+        shutterSpeed = (1.0f / btn.tag);
+        self.shutterLabel.text = [NSString stringWithFormat:@"1/%d", btn.tag];
+    }
+    
+    [self setCurrentShutterSpeed:shutterSpeed];
+    self.shutterLabel.textColor = [UIColor blueColor];
+}
+
+- (void)setCurrentShutterSpeed:(float)shutterSpeed
+{
+    NSLog(@"setCurrentShutterSpeed:%f", shutterSpeed);
+}
+
+- (float)currentShutterSpeed
+{
+    return 0;
+}
+
+- (IBAction)onSetShutterAndISOAutoAct:(id)sender
+{
+    self.shutterLabel.textColor = [UIColor grayColor];
+    self.ISOLabel.textColor = [UIColor grayColor];
+    [self setShutterViewHidden:YES];
+    [self setISOViewHidden:YES];
 }
 
 @end
