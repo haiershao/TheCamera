@@ -56,36 +56,36 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         _sessionQueue = dispatch_queue_create("TCCamerHelperSessionQueue", DISPATCH_QUEUE_SERIAL);
         
-//        dispatch_async(_sessionQueue, ^{
+        NSError *error = nil;
         
-            NSError *error = nil;
+        AVCaptureDevice *videoDevice = [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
+        _videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+        
+        if (error)
+        {
+            NSLog(@"%@", error);
+        }
+        
+        if ([_session canAddInput:_videoDeviceInput])
+        {
+            [_session addInput:_videoDeviceInput];
             
-            AVCaptureDevice *videoDevice = [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
-            _videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
-            
-            if (error)
-            {
-                NSLog(@"%@", error);
-            }
-            
-            if ([_session canAddInput:_videoDeviceInput])
-            {
-                [_session addInput:_videoDeviceInput];
-
-                dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-                    [[(AVCaptureVideoPreviewLayer *)[_preview layer] connection] setVideoOrientation:AVCaptureVideoOrientationPortrait];
-                });
-            }
+                [[(AVCaptureVideoPreviewLayer *)[_preview layer] connection] setVideoOrientation:AVCaptureVideoOrientationPortrait];
+            });
+        }
         
-            
-            _stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-            if ([_session canAddOutput:_stillImageOutput])
-            {
-                [_stillImageOutput setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
-                [_session addOutput:_stillImageOutput];
-            }
-//        });
+        
+        _stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+        if ([_session canAddOutput:_stillImageOutput])
+        {
+            [_stillImageOutput setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
+            [_session addOutput:_stillImageOutput];
+        }
+        
+        [self setWhiteBalanceMode:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance];
+        
     }
     return self;
 }
@@ -171,21 +171,32 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             preferredPosition = AVCaptureDevicePositionBack;
             break;
         case AVCaptureDevicePositionBack:
-            preferredPosition = AVCaptureDevicePositionFront;
+            preferredPosition = AVCaptureDevicePositionBack;
             break;
         case AVCaptureDevicePositionFront:
-            preferredPosition = AVCaptureDevicePositionBack;
+            preferredPosition = AVCaptureDevicePositionFront;
             break;
     }
     
     return [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:preferredPosition];
 }
 
+- (AVCaptureDevice *)captureDeviceWithPositon:(AVCaptureDevicePosition)position
+{
+    return [self deviceWithMediaType:AVMediaTypeVideo preferringPosition:position];
+}
+
 - (void)changeCameraWithCompletion:(void (^)(void))completion
 {
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *currentVideoDevice = [self.videoDeviceInput device];
-        AVCaptureDevice *videoDevice = [self currentCaptureDevice];
+        AVCaptureDevice *videoDevice = nil;
+        if (currentVideoDevice.position == AVCaptureDevicePositionBack) {
+            videoDevice = [self captureDeviceWithPositon:AVCaptureDevicePositionFront];
+        }
+        else {
+            videoDevice = [self captureDeviceWithPositon:AVCaptureDevicePositionBack];
+        }
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:nil];
         
         [[self session] beginConfiguration];
@@ -379,6 +390,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 #pragma mark - white balance
 
+- (AVCaptureWhiteBalanceGains)whiteBalanceGanis
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    
+    AVCaptureWhiteBalanceMode mode = device.whiteBalanceMode;
+    
+    float maxValue = device.maxWhiteBalanceGain;
+    AVCaptureWhiteBalanceGains gains = device.deviceWhiteBalanceGains;
+    AVCaptureWhiteBalanceTemperatureAndTintValues value = [device temperatureAndTintValuesForDeviceWhiteBalanceGains:gains];
+    return gains;
+}
+
 - (void)setWhiteBalanceMode:(AVCaptureWhiteBalanceMode)whiteBalanceMode
 {
     AVCaptureDevice *device = [self currentCaptureDevice];
@@ -416,7 +439,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
     
     @try {
-        AVCaptureWhiteBalanceTemperatureAndTintValues temp = {whiteBalanceTemp, 100};
+        AVCaptureWhiteBalanceTemperatureAndTintValues temp = {whiteBalanceTemp, -20};
         AVCaptureWhiteBalanceGains whitebalanceGains = [device deviceWhiteBalanceGainsForTemperatureAndTintValues:temp];
         [device setWhiteBalanceModeLockedWithDeviceWhiteBalanceGains:whitebalanceGains completionHandler:^(CMTime time) {
             
@@ -436,6 +459,76 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     AVCaptureWhiteBalanceGains whitebalanceGains = [device deviceWhiteBalanceGains];
     NSLog(@"%f", [device temperatureAndTintValuesForDeviceWhiteBalanceGains:whitebalanceGains].tint);
     return [device temperatureAndTintValuesForDeviceWhiteBalanceGains:whitebalanceGains].temperature;
+}
+
+#pragma mark - 曝光
+
+- (CMTime)shutterSpeed
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    return [device exposureDuration];
+}
+
+- (void)setShutterSpeed:(CMTime)shutterSpeed
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    
+//    AVCaptureExposureMode mode = device.exposureMode;
+    NSError *error = nil;
+    [device lockForConfiguration:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+    }
+    
+    @try {
+        [device setExposureModeCustomWithDuration:shutterSpeed ISO:device.ISO completionHandler:^(CMTime syncTime) {
+            
+        }];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    }
+    
+    [device unlockForConfiguration];
+}
+
+- (float)ISOValue
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    return device.ISO;
+}
+
+- (void)setISOValue:(float)ISOValue
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    NSError *error = nil;
+    [device lockForConfiguration:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+    }
+    
+    @try {
+        [device setExposureModeCustomWithDuration:device.exposureDuration ISO:ISOValue completionHandler:^(CMTime syncTime) {
+            
+        }];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"%@", exception);
+    }
+    
+    [device unlockForConfiguration];
+}
+
+- (void)setExposureAutoMode
+{
+    AVCaptureDevice *device = [self currentCaptureDevice];
+    NSError *error = nil;
+    [device lockForConfiguration:&error];
+    if (error) {
+        NSLog(@"error: %@", error);
+    }
+    device.exposureMode = AVCaptureExposureModeContinuousAutoExposure;
+    [device unlockForConfiguration];
 }
 
 @end

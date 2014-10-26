@@ -17,18 +17,26 @@
 @property (nonatomic, readonly) TCCameraPreview *preview;
 @property (nonatomic, weak) id<TCCameraHelperDelegate> delegate;
 
-//曝光
-@property (nonatomic, assign) AVCaptureFlashMode currentFlashMode;//曝光模式
+//闪光灯
+@property (nonatomic, assign) AVCaptureFlashMode currentFlashMode;//闪光灯模式
 
 //白平衡
 @property (nonatomic, assign) AVCaptureWhiteBalanceMode whiteBalanceMode;
 @property (nonatomic, assign) float whiteBalanceTemp;
+@property (nonatomic, readonly) AVCaptureWhiteBalanceGains whiteBalanceGanis;
+
+//曝光
+@property (nonatomic, assign) CMTime shutterSpeed;
+@property (nonatomic, assign) float ISOValue;
 
 + (TCCameraEngine *)sharedInstance;
 - (void)changeCameraWithCompletion:(void (^)(void))completion;
 - (void)startRunning;
 - (void)stopRunning;
 - (void)snapStillImage:(void (^)(NSData *))completion;
+
+//曝光
+- (void)setExposureAutoMode;
 
 @end
 

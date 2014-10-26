@@ -12,10 +12,19 @@
 #import "TCSettingViewController.h"
 #import "TCAssetCacheManager.h"
 #import "TCCameraGridView.h"
+#import "TCUtils.h"
+
+typedef enum _TCCameraControlMode {
+    TCCameraControlAutoMode,
+    TCCameraControlManualMode,
+} TCCameraControlMode;
 
 @interface TCCameraViewController () <TCCameraHelperDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) TCCameraEngine *cameraEngine;
+@property (nonatomic, assign) TCCameraControlMode controlMode;
+@property (nonatomic, strong) NSTimer *controlTimer;
+
 @property (weak, nonatomic) IBOutlet UIButton *shutterButton;
 @property (weak, nonatomic) IBOutlet UIButton *flashModeBtn;
 
@@ -23,10 +32,12 @@
 @property (strong, nonatomic) UIView *coverView;
 @property (strong, nonatomic) TCCameraGridView *gridView;
 
+@property (weak, nonatomic) IBOutlet UIView *whiteBalanceView;
 @property (weak, nonatomic) IBOutlet UIView *shutterView;
 @property (weak, nonatomic) IBOutlet UIView *ISOView;
 @property (weak, nonatomic) IBOutlet UILabel *shutterLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ISOLabel;
+@property (weak, nonatomic) IBOutlet UILabel *wbLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *seniorControlBar;
 @property (assign, nonatomic) BOOL isControlBarHidden;
@@ -56,11 +67,13 @@
     
     self.isControlBarHidden = YES;
     
-    self.cameraEngine.whiteBalanceTemp = 4000;
-    self.cameraEngine.whiteBalanceMode = AVCaptureWhiteBalanceModeLocked;
+    self.cameraEngine.whiteBalanceMode = AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance;
     
     self.ISOView.hidden = YES;
     self.shutterView.hidden = YES;
+    self.whiteBalanceView.hidden = YES;
+    
+    self.controlMode = TCCameraControlAutoMode;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -73,8 +86,14 @@
     [self setControlBarHidden:self.isControlBarHidden animation:NO];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [self stopListenParameter];
     [self setButtonsEnabled:NO];
     [super viewDidDisappear:animated];
     
@@ -84,6 +103,54 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setControlMode:(TCCameraControlMode)controlMode
+{
+    _controlMode = controlMode;
+    if (_controlMode == TCCameraControlAutoMode) {
+        [self.cameraEngine setExposureAutoMode];
+        if (!self.isControlBarHidden) {
+            [self startListenParameter];
+        }
+        else {
+            [self stopListenParameter];
+        }
+    }
+    else {
+        [self stopListenParameter];
+    }
+}
+
+- (void)startListenParameter
+{
+    if (self.controlTimer) {
+        return;
+    }
+    else {
+        self.controlTimer = [NSTimer scheduledTimerWithTimeInterval:2.0f
+                                                             target:self
+                                                           selector:@selector(readParameters)
+                                                           userInfo:nil
+                                                            repeats:YES];
+    }
+}
+
+- (void)stopListenParameter
+{
+    [self.controlTimer invalidate];
+    self.controlTimer = nil;
+}
+
+- (void)readParameters
+{
+//    NSInteger isoValue = self.cameraEngine
+//    NSInteger shutterSpeed = self.cameraEngine.
+//    NSInteger wbValue = self.cameraEngine.whiteBalanceTemp;
+//    self.wbLabel.text = [NSString stringWithFormat:@"%d", wbValue];
+    
+    self.ISOLabel.text = [NSString stringWithFormat:@"%d", [self currentISOValue]];
+    self.shutterLabel.text = self.currentShutterSpeed;
 }
 
 - (void)setButtonsEnabled:(BOOL)enabled
@@ -233,6 +300,7 @@
         }];
     }
     self.isControlBarHidden = hidden;
+    self.controlMode = self.controlMode;
 }
 
 #pragma  mark - ISO
@@ -241,7 +309,6 @@
 {
     self.ISOView.hidden = hidden;
 }
-
 
 - (IBAction)onISOAct:(id)sender
 {
@@ -255,16 +322,18 @@
     self.ISOLabel.text = [NSString stringWithFormat:@"%d", btn.tag];
     [self setCurrentISOValue:btn.tag];
     self.ISOLabel.textColor = [UIColor blueColor];
+    self.controlMode = TCCameraControlManualMode;
 }
 
 - (void)setCurrentISOValue:(NSInteger)ISOValue
 {
     NSLog(@"setCurrentISOValue: %d", ISOValue);
+    self.cameraEngine.ISOValue = ISOValue;
 }
 
 - (NSInteger)currentISOValue
 {
-    return 0;
+    return self.cameraEngine.ISOValue;
 }
 
 #pragma mark - shutter
@@ -300,19 +369,66 @@
 - (void)setCurrentShutterSpeed:(float)shutterSpeed
 {
     NSLog(@"setCurrentShutterSpeed:%f", shutterSpeed);
+    self.cameraEngine.shutterSpeed = CMTimeMake(1, 1/shutterSpeed);
 }
 
-- (float)currentShutterSpeed
+- (NSString *)currentShutterSpeed
 {
-    return 0;
+    CMTime time = self.cameraEngine.shutterSpeed;
+    return [TCUtils shutterSpeedString:time];
 }
 
 - (IBAction)onSetShutterAndISOAutoAct:(id)sender
 {
     self.shutterLabel.textColor = [UIColor grayColor];
     self.ISOLabel.textColor = [UIColor grayColor];
+    self.wbLabel.textColor = [UIColor grayColor];
+    
     [self setShutterViewHidden:YES];
     [self setISOViewHidden:YES];
+    self.controlMode = TCCameraControlAutoMode;
+}
+
+#pragma mark - white balance
+
+- (IBAction)onWBBtnAct:(id)sender
+{
+    self.whiteBalanceView.hidden = !self.whiteBalanceView.hidden;
+}
+
+- (IBAction)onWBChangedAct:(id)sender
+{
+    UIButton *btn = sender;
+    [self setWBValue:btn.tag];
+    if (btn.tag == 0) {
+        self.wbLabel.text = @"Auto";
+    }
+    else {
+        self.wbLabel.text = [NSString stringWithFormat:@"%d", btn.tag];
+    }
+}
+
+- (void)setWBViewHidden:(BOOL)hidden
+{
+    self.whiteBalanceView.hidden = hidden;
+}
+
+- (void)setWBValue:(NSInteger)wbValue
+{
+    NSLog(@"setWBValue:%d", wbValue);
+    if (wbValue == 0) {
+        self.cameraEngine.whiteBalanceMode = AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance;
+    }
+    else {
+        self.cameraEngine.whiteBalanceMode = AVCaptureWhiteBalanceModeLocked;
+        self.cameraEngine.whiteBalanceTemp = wbValue;
+
+    }
+}
+
+- (NSInteger)WBValue
+{
+    return self.cameraEngine.whiteBalanceMode;
 }
 
 @end
